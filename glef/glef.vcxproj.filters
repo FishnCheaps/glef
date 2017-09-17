@@ -52,6 +52,9 @@
     <ClInclude Include="common\commonIncludes.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="GlefCamera.hpp">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\SimpleFragmentShader.fragmentshader">
