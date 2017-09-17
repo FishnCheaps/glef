@@ -1,0 +1,8 @@
+﻿  Source.cpp
+d:\repos\glef\glef\glef\gleffobject.hpp(31): warning C4018: <: несоответствие типов со знаком и без знака
+d:\repos\glef\glef\glef\glef.hpp(97): warning C4018: <: несоответствие типов со знаком и без знака
+d:\repos\glef\glef\glef\glef.hpp(129): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+d:\repos\glef\glef\glef\glef.hpp(130): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+LINK : warning LNK4098: сшсышюЄхър яю єьюыўрэш■ "MSVCRT" яЁюЄштюЁхўшЄ шёяюы№чютрэш■ фЁєушї сшсышюЄхъ; шёяюы№чєщЄх ярЁрьхЄЁ /NODEFAULTLIB:library
+  glef.vcxproj -> D:\Repos\GLEF\glef\Debug\glef.exe
+  glef.vcxproj -> D:\Repos\GLEF\glef\Debug\glef.pdb (Partial PDB)
