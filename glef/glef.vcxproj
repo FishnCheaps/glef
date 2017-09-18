@@ -152,7 +152,7 @@
     <ClInclude Include="Glef.hpp" />
     <ClInclude Include="GlefCollor.hpp" />
     <ClInclude Include="GlefEnums.hpp" />
-    <ClInclude Include="GleffObject.hpp" />
+    <ClInclude Include="GlefObject.hpp" />
     <ClInclude Include="GlefModel.hpp" />
     <ClInclude Include="GlefShader.hpp" />
     <ClInclude Include="GlefWindow.hpp" />

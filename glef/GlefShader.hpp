@@ -38,10 +38,10 @@ public:
 	@param vertexshader_file path to file with vertex shader
 	@param fragmentshader_file path to file with fragment shader
 	*/
-	std::shared_ptr<GfShader> loadShader(std::string vertexshader_file, std::string fragmentshader_file)
+	GfShader loadShader(std::string vertexshader_file, std::string fragmentshader_file)
 	{
 		GLuint id = LoadShaders(vertexshader_file.c_str(), fragmentshader_file.c_str());
-		return std::make_shared<GfShader>(id);
+		return GfShader(id);
 	}
 private:
 	GfShaderFactory() {};

@@ -7,9 +7,11 @@
 #include "GlefWindow.hpp"
 #include "GlefEnums.hpp"
 #include "GlefShader.hpp"
+#include "GlefObject.hpp"
 using namespace glm;
 
-class GfModel {
+class GfModel : public GfObject
+{
 public:
 	//GfModel() {};
 	~GfModel()
@@ -33,9 +35,10 @@ public:
 	/** Proceed this element in every frame. Drowing object
 	@param shaders Shader that should be used for drowing model
 	*/
-	void useElement(std::shared_ptr<GfShader> shaders)
+	void useElement() override
 	{
-		glUseProgram(shaders->getId());
+		glUseProgram(shader->getId());
+		glUniformMatrix4fv(matrix, 1, GL_FALSE, &mvp[0][0]);
 		glEnableVertexAttribArray(0); //TO-DO Ask Alehondrii
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glVertexAttribPointer(
@@ -48,13 +51,26 @@ public:
 		);
 
 		// Draw the triangle !
-		glDrawArrays(GL_TRIANGLES, 0, 3); // 3 indices starting at 0 -> 1 triangle
+		glDrawArrays(GL_TRIANGLES, 0, vertices.size()); // 3 indices starting at 0 -> 1 triangle
 
 		glDisableVertexAttribArray(0);//TO-DO Ask Alehondrii
 	}
+	void postInit() override
+	{
+		matrix = glGetUniformLocation(shader->getId(), "mvp");
+	}
+	/** Set shader for model
+	@param mesh_vertices pointer on a shader
+	*/
+	void setShader(GfShader* shader)
+	{
+		this->shader = shader;
+	}
 private:
+	GfShader* shader;
 	GLuint vbo;
 	GLuint vao;
+	GLuint matrix;
 	bool is_vbo_set = 0;
 	bool is_vao_set = 0;
 	std::vector<GLfloat> vertices;

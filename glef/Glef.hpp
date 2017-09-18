@@ -7,7 +7,8 @@
 #include "GlefWindow.hpp"
 #include "GlefEnums.hpp"
 #include "GlefModel.hpp"
-#include "GleffObject.hpp"
+#include "GlefObject.hpp"
+#include "GlefCamera.hpp"
 using namespace glm;
 
 class Glef {
@@ -86,17 +87,22 @@ public:
 		return active_window;
 	}
 	/** Drow all frames inside
+	@param camera Camera that will be used to render
 	*/
-	void Proceed() {
+	void Proceed(GfCamera *camera) {
 		active_window.setBackgroundCollor(GfCollorFactory::use().getCollor(Blue));
-
+		for (auto i = 0; i<objects.size(); i++)
+		{
+			objects[i]->init();
+			camera->preProcessObject(objects[i]);			
+		}
 
 		do {
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			for (auto i=0;i<objects.size();i++)
 			{
-				objects[i]->useElement();
+				objects[i]->proceed();
 			}
 
 			glfwSwapBuffers(Glef::use().getActiveWindow().window_ptr);

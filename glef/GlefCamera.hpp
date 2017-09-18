@@ -1,7 +1,8 @@
 #pragma once
 #include "common/commonIncludes.h"
+#include "GlefObject.hpp"
 
-class GfCamera
+class GfCamera : public GfObject
 {
 public:
 	GfCamera();
@@ -30,17 +31,37 @@ public:
 		up_at=direction_up;
 		updateView();
 	}
+	/** Get Projection matrix
+	@return Cameras projection martrix
+	*/
+	glm::mat4 getProjection()
+	{
+		return projection_matrix;
+	}
+	/** Get View matrix
+	@return Cameras view martrix
+	*/
+	glm::mat4 getView()
+	{
+		return view_matrix;
+	}
+	/** Process with object to prepare it for rendering
+	@param obj pointer to a processed object
+	*/
+	void preProcessObject(GfObject* obj)
+	{
+		obj->setMVP(projection_matrix*view_matrix*obj->modelMatrix());
+	}
 private:
-	glm::vec3 position=glm::vec3(0, 0, 0);
 	glm::vec3 look_at= glm::vec3(0, 0, 0);
 	glm::vec3 up_at = glm::vec3(0, 1, 0);
-	glm::mat4 View;
-	glm::mat4 Projection = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
+	glm::mat4 view_matrix;
+	glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
 	/** Update camera matrix
 	*/
 	void updateView()
 	{
-		View=glm::lookAt(position, look_at, up_at);
+		view_matrix=glm::lookAt(position, look_at, up_at);
 	}
 };
 
@@ -67,12 +88,13 @@ public:
 	@param up_direction Define direction of camera top, used to rotate camera upwords
 	@return pointer on new camera
 	*/
-	std::shared_ptr<GfCamera> getCamera(glm::vec3 pos, glm::vec3 direction, glm::vec3 up_direction= glm::vec3(0, 1, 0))
+	GfCamera getCamera(glm::vec3 pos, glm::vec3 direction, glm::vec3 up_direction= glm::vec3(0, 1, 0))
 	{
-		std::shared_ptr<GfCamera> cam = std::make_shared<GfCamera>();
-		cam->setDirection(direction);
-		cam->setPosition(pos);
-		cam->setPositionUp(up_direction);
+		GfCamera cam;
+		cam.setDirection(direction);
+		cam.setPosition(pos);
+		cam.setPositionUp(up_direction);
+		cam.setInitialized();
 		return cam;
 	}
 private:

@@ -46,13 +46,13 @@
     <ClInclude Include="GlefShader.hpp">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="GleffObject.hpp">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="common\commonIncludes.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="GlefCamera.hpp">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="GlefObject.hpp">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>
