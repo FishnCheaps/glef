@@ -109,10 +109,51 @@ int main() {
 		0.483f,  0.596f,  0.789f,
 		0.559f,  0.861f,  0.639f,
 		0.195f,  0.548f,  0.859f };
+	std::vector<GLfloat> uv= {
+		0.000059f, 1.0f - 0.000004f,
+		0.000103f, 1.0f - 0.336048f,
+		0.335973f, 1.0f - 0.335903f,
+		1.000023f, 1.0f - 0.000013f,
+		0.667979f, 1.0f - 0.335851f,
+		0.999958f, 1.0f - 0.336064f,
+		0.667979f, 1.0f - 0.335851f,
+		0.336024f, 1.0f - 0.671877f,
+		0.667969f, 1.0f - 0.671889f,
+		1.000023f, 1.0f - 0.000013f,
+		0.668104f, 1.0f - 0.000013f,
+		0.667979f, 1.0f - 0.335851f,
+		0.000059f, 1.0f - 0.000004f,
+		0.335973f, 1.0f - 0.335903f,
+		0.336098f, 1.0f - 0.000071f,
+		0.667979f, 1.0f - 0.335851f,
+		0.335973f, 1.0f - 0.335903f,
+		0.336024f, 1.0f - 0.671877f,
+		1.000004f, 1.0f - 0.671847f,
+		0.999958f, 1.0f - 0.336064f,
+		0.667979f, 1.0f - 0.335851f,
+		0.668104f, 1.0f - 0.000013f,
+		0.335973f, 1.0f - 0.335903f,
+		0.667979f, 1.0f - 0.335851f,
+		0.335973f, 1.0f - 0.335903f,
+		0.668104f, 1.0f - 0.000013f,
+		0.336098f, 1.0f - 0.000071f,
+		0.000103f, 1.0f - 0.336048f,
+		0.000004f, 1.0f - 0.671870f,
+		0.336024f, 1.0f - 0.671877f,
+		0.000103f, 1.0f - 0.336048f,
+		0.336024f, 1.0f - 0.671877f,
+		0.335973f, 1.0f - 0.335903f,
+		0.667969f, 1.0f - 0.671889f,
+		1.000004f, 1.0f - 0.671847f,
+		0.667979f, 1.0f - 0.335851f
+	};
+
 	auto shader = GfShaderFactory::use().loadShader("shaders/SimpleVertexShader.vertexshader", "shaders/SimpleFragmentShader.fragmentshader");
+	auto shader2 = GfShaderFactory::use().loadShader("shaders/TransformVertexShader.vertexshader", "shaders/TextureFragmentShader.fragmentshader");
 	obj.setVertices(vec);
-	obj.setColor(col);
-	obj.setShader(&shader);
+	//obj.setColor(col);
+	obj.setShader(&shader2);
+	obj.addTexture("uvtemplate.DDS", uv);
 	obj2.setVertices(vec2);
 	obj2.setColor(col2);
 	obj2.setShader(&shader);

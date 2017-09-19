@@ -55,6 +55,9 @@
     <ClInclude Include="GlefObject.hpp">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="GlefControls.hpp">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\SimpleFragmentShader.fragmentshader">
@@ -63,5 +66,16 @@
     <None Include="shaders\SimpleVertexShader.vertexshader">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="shaders\TextureFragmentShader.fragmentshader">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\TransformVertexShader.vertexshader">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="common\uvtemplate.DDS">
+      <Filter>Common</Filter>
+    </Image>
   </ItemGroup>
 </Project>

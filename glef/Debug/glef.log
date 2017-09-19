@@ -3,9 +3,11 @@ d:\repos\glef\glef\glef\glefobject.hpp(29): warning C4244: =: преобразо
 d:\repos\glef\glef\glef\glefobject.hpp(37): warning C4244: =: преобразование "double" в "float", возможна потеря данных
 d:\repos\glef\glef\glef\glefobject.hpp(45): warning C4244: =: преобразование "double" в "float", возможна потеря данных
 d:\repos\glef\glef\glef\glefobject.hpp(90): warning C4018: <: несоответствие типов со знаком и без знака
-d:\repos\glef\glef\glef\glef.hpp(94): warning C4018: <: несоответствие типов со знаком и без знака
-d:\repos\glef\glef\glef\glef.hpp(103): warning C4018: <: несоответствие типов со знаком и без знака
-d:\repos\glef\glef\glef\glef.hpp(135): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
-d:\repos\glef\glef\glef\glef.hpp(136): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+d:\repos\glef\glef\glef\glefmodel.hpp(179): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  c:\program files (x86)\windows kits\10\include\10.0.15063.0\ucrt\stdio.h(207): note:  см. объявление "fopen"
+d:\repos\glef\glef\glef\glef.hpp(100): warning C4018: <: несоответствие типов со знаком и без знака
+d:\repos\glef\glef\glef\glef.hpp(109): warning C4018: <: несоответствие типов со знаком и без знака
+d:\repos\glef\glef\glef\glef.hpp(141): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
+d:\repos\glef\glef\glef\glef.hpp(142): warning C4244: аргумент: преобразование "float" в "int", возможна потеря данных
   glef.vcxproj -> D:\Repos\GLEF\glef\Debug\glef.exe
   glef.vcxproj -> D:\Repos\GLEF\glef\Debug\glef.pdb (Partial PDB)

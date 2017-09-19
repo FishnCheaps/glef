@@ -151,6 +151,7 @@
     <ClInclude Include="GlefCamera.hpp" />
     <ClInclude Include="Glef.hpp" />
     <ClInclude Include="GlefCollor.hpp" />
+    <ClInclude Include="GlefControls.hpp" />
     <ClInclude Include="GlefEnums.hpp" />
     <ClInclude Include="GlefObject.hpp" />
     <ClInclude Include="GlefModel.hpp" />
@@ -160,6 +161,11 @@
   <ItemGroup>
     <None Include="shaders\SimpleFragmentShader.fragmentshader" />
     <None Include="shaders\SimpleVertexShader.vertexshader" />
+    <None Include="shaders\TextureFragmentShader.fragmentshader" />
+    <None Include="shaders\TransformVertexShader.vertexshader" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="common\uvtemplate.DDS" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -91,6 +91,12 @@ public:
 	*/
 	void Proceed(GfCamera *camera) {
 		active_window.setBackgroundCollor(GfCollorFactory::use().getCollor(Blue));
+
+		// Enable depth test
+		glEnable(GL_DEPTH_TEST);
+		// Accept fragment if it closer to the camera than the former one
+		glDepthFunc(GL_LESS);
+
 		for (auto i = 0; i<objects.size(); i++)
 		{
 			objects[i]->init();
@@ -98,8 +104,8 @@ public:
 		}
 
 		do {
-			glClear(GL_COLOR_BUFFER_BIT);
-
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			// Enable depth test
 			for (auto i=0;i<objects.size();i++)
 			{
 				objects[i]->proceed();
