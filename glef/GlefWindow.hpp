@@ -11,6 +11,8 @@ public:
 	GfWindow() {};
 	GfWindow(GLFWwindow*) {};
 	GLFWwindow* window_ptr;
+	int width=1024;
+	int height=720;
 	/** Set window background collor
 	@param collor Collor to set
 	*/

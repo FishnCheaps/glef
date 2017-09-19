@@ -1,10 +1,15 @@
 #pragma once
 #include "common/commonIncludes.h"
 #include "GlefObject.hpp"
+#include "GlefControls.hpp"
 
 class GfCamera : public GfObject
 {
 public:
+	//refact
+	float initial_fov= 45.0f;
+	glm::mat4 view_matrix;
+	glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
 	GfCamera();
 	~GfCamera();
 	/** Set camera position
@@ -55,8 +60,6 @@ public:
 private:
 	glm::vec3 look_at= glm::vec3(0, 0, 0);
 	glm::vec3 up_at = glm::vec3(0, 1, 0);
-	glm::mat4 view_matrix;
-	glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
 	/** Update camera matrix
 	*/
 	void updateView()
@@ -72,6 +75,22 @@ GfCamera::GfCamera()
 GfCamera::~GfCamera()
 {
 }
+
+
+class GfCameraActive : public GfCamera
+{
+public:
+	GfControls controls;
+	GfCameraActive() {};
+	~GfCameraActive() {};
+
+
+private:
+
+};
+
+
+
 
 class GfCameraFactory {
 public:
@@ -91,6 +110,15 @@ public:
 	GfCamera getCamera(glm::vec3 pos, glm::vec3 direction, glm::vec3 up_direction= glm::vec3(0, 1, 0))
 	{
 		GfCamera cam;
+		cam.setDirection(direction);
+		cam.setPosition(pos);
+		cam.setPositionUp(up_direction);
+		cam.setInitialized();
+		return cam;
+	}
+	GfCameraActive getCameraActive(glm::vec3 pos, glm::vec3 direction, glm::vec3 up_direction = glm::vec3(0, 1, 0))
+	{
+		GfCameraActive cam;
 		cam.setDirection(direction);
 		cam.setPosition(pos);
 		cam.setPositionUp(up_direction);

@@ -4,6 +4,7 @@ int main() {
 	Glef::use().CreateAndMakeActiveWindow();
 	GfModel obj;
 	GfModel obj2;
+	GfModel land;
 	//Testim
 	std::vector<GLfloat> vec = {
 		-1.0f,-1.0f,-1.0f,
@@ -96,6 +97,21 @@ int main() {
 		1.0f,1.0f,1.0f,
 		0.0f,2.0f,0.0f
 	};
+	std::vector<GLfloat> vec3 = {
+		-10.0f,0.0f,-10.0f,
+		10.0f,0.0f,-10.0f,
+		10.0f,0.0f,10.0f,
+		-10.0f,0.0f,-10.0f,
+		-10.0f,0.0f,10.0f,
+		10.0f,0.0f,10.0f
+	};
+	std::vector<GLfloat> col3 = {
+		0.583f,  0.771f,  0.014f,
+		0.609f,  0.115f,  0.436f,
+		0.327f,  0.483f,  0.844f,
+		0.822f,  0.569f,  0.201f,
+		0.435f,  0.602f,  0.223f,
+		0.310f,  0.747f,  0.185f };
 	std::vector<GLfloat> col2 = {
 		0.583f,  0.771f,  0.014f,
 		0.609f,  0.115f,  0.436f,
@@ -157,9 +173,23 @@ int main() {
 	obj2.setVertices(vec2);
 	obj2.setColor(col2);
 	obj2.setShader(&shader);
+	land.setVertices(vec3);
+	land.setColor(col3);
+	land.setShader(&shader);
+	GfForce force;
+	force.rot_x = 5;
+	obj.force = &force;
 	Glef::use().addObject(obj);
 	Glef::use().addObject(obj2);
-	GfCamera cam=GfCameraFactory::use().getCamera(glm::vec3(4, 3, 3), glm::vec3(0, 0, 0));
+	//Glef::use().addObject(land);
+	//GfCamera cam=GfCameraFactory::use().getCamera(glm::vec3(4, 3, 3), glm::vec3(0, 0, 0));
+	GfCameraActive cam = GfCameraFactory::use().getCameraActive(glm::vec3(4, 3, 3), glm::vec3(0, 0, 0));
+	/*cam.position = glm::vec3(0, 0, 5);
+	cam.horizontal_angle= 3.14f;
+	cam.vertical_angle = 0.0f;
+	cam.initial_fov = 45.0f;*/
+	GfControls controls;
+	cam.controls = controls;
 	//Uzhe net
 	Glef::use().Proceed(&cam);
 }

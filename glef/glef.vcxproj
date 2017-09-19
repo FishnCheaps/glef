@@ -143,6 +143,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="common\shader.cpp" />
+    <ClCompile Include="GlefForce.hpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -155,7 +156,9 @@
     <ClInclude Include="GlefEnums.hpp" />
     <ClInclude Include="GlefObject.hpp" />
     <ClInclude Include="GlefModel.hpp" />
+    <ClInclude Include="GlefRenderEngine.hpp" />
     <ClInclude Include="GlefShader.hpp" />
+    <ClInclude Include="GlefTexture.hpp" />
     <ClInclude Include="GlefWindow.hpp" />
   </ItemGroup>
   <ItemGroup>

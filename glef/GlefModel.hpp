@@ -8,6 +8,9 @@
 #include "GlefEnums.hpp"
 #include "GlefShader.hpp"
 #include "GlefObject.hpp"
+#include "GlefTexture.hpp"
+#include "GlefCamera.hpp"
+#include "GlefWindow.hpp"
 
 
 
@@ -17,9 +20,101 @@
 
 using namespace glm;
 
+//void computeCameraMatricesFromInputs(GfCameraActive * camera, GfWindow * window, GfControls * controls) {
+//
+//	// glfwGetTime is called only once, the first time this function is called
+//	static double lastTime = glfwGetTime();
+//
+//	// Compute time difference between current and last frame
+//	double currentTime = glfwGetTime();
+//	float deltaTime = float(currentTime - lastTime);
+//
+//	// Get mouse position
+//	double xpos, ypos;
+//	//glfwGetCursorPos(window->window_ptr, &xpos, &ypos);
+//	// Reset mouse position for next frame
+//	//glfwSetCursorPos(window->window_ptr, window->width / 2, window->height / 2);
+//	//glfwSetCursorPos(window->window_ptr, 1024 / 2, 768 / 2);
+//	// Compute new orientation
+//	//camera->horizontal_angle = controls->mouseSpeed* float(window->width / 2 - xpos);
+//	//camera->vertical_angle = controls->mouseSpeed* float(window->height / 2 - ypos);
+//	//camera->horizontal_angle += controls->mouseSpeed* float(1024 / 2 - xpos);
+//	//camera->vertical_angle += controls->mouseSpeed* float(768 / 2 - ypos);
+//	//::cout << camera->horizontal_angle << " " << camera->vertical_angle << std::endl;
+//	// Direction : Spherical coordinates to Cartesian coordinates conversion
+//	glm::vec3 direction(
+//		cos(camera->vertical_angle) * sin(camera->horizontal_angle),
+//		sin(camera->vertical_angle),
+//		cos(camera->vertical_angle) * cos(camera->horizontal_angle)
+//	);
+//
+//	// Right vector
+//	glm::vec3 right = glm::vec3(
+//		sin(camera->horizontal_angle - 3.14f / 2.0f),
+//		0,
+//		cos(camera->horizontal_angle - 3.14f / 2.0f)
+//	);
+//
+//	// Up vector
+//	glm::vec3 up = glm::cross(right, direction);
+//
+//	// Move forward
+//	if (glfwGetKey(window->window_ptr, controls->key_up) == GLFW_PRESS) {
+//		camera->position += direction * deltaTime * controls->speed;
+//	}
+//	// Move backward
+//	if (glfwGetKey(window->window_ptr, controls->key_down) == GLFW_PRESS) {
+//		camera->position -= direction * deltaTime * controls->speed;
+//	}
+//	// Strafe right
+//	if (glfwGetKey(window->window_ptr, controls->key_right) == GLFW_PRESS) {
+//		camera->position += right * deltaTime * controls->speed;
+//	}
+//	// Strafe left
+//	if (glfwGetKey(window->window_ptr, controls->key_left) == GLFW_PRESS) {
+//		camera->position -= right * deltaTime * controls->speed;
+//	}
+//
+//	float FoV = camera->initial_fov;// - 5 * glfwGetMouseWheel(); // Now GLFW 3 requires setting up a callback for this. It's a bit too complicated for this beginner's tutorial, so it's disabled instead.
+//
+//									// Projection matrix : 45° Field of View, 4:3 ratio, display range : 0.1 unit <-> 100 units
+//	camera->projection_matrix = glm::perspective(glm::radians(FoV), 4.0f / 3.0f, 0.1f, 100.0f);
+//	// Camera matrix
+//	camera->view_matrix = glm::lookAt(
+//		camera->position,           // Camera is here
+//		camera->position + direction, // and looks here : at the same position, plus "direction"
+//		up                  // Head is up (set to 0,-1,0 to look upside-down)
+//	);
+//
+//	// For the next frame, the "last time" will be "now"
+//	lastTime = currentTime;
+//}
+
+
+
 class GfModel : public GfObject
 {
 public:
+	//refactor
+	GfShader* shader;
+	GLuint vbo;
+	GLuint vao;
+	GLuint matrix_id;
+	GLuint color;
+	bool is_textured = 0;
+	std::vector<GLfloat> vertices;
+	std::vector<GLfloat> colors;
+	std::vector<GLfloat> texture_uv;
+	GfTexture textureFromModelTMP() //TO-DO remove it
+	{
+		GfTexture tx;
+		tx.texture = this->Texture;
+		tx.texture_id = this->texture_id;
+		tx.texture_uv = this->texture_uv;
+		tx.uvbuffer = this->uvbuffer;
+		return tx;
+	}
+
 	//GfModel() {};
 	~GfModel()
 	{
@@ -51,10 +146,17 @@ public:
 	/** Proceed this element in every frame. Drowing object
 	@param shaders Shader that should be used for drowing model
 	*/
-	void useElement() override
+	void useElement(GfCameraActive * cam, GfWindow * window)
 	{
 		glUseProgram(shader->getId());
-		glUniformMatrix4fv(matrix, 1, GL_FALSE, &mvp[0][0]);
+		//tmp
+		//computeCameraMatricesFromInputs(cam, window, &(cam->controls));
+		glm::mat4 ProjectionMatrix = cam->projection_matrix;
+		glm::mat4 ViewMatrix = cam->view_matrix;
+		glm::mat4 ModelMatrix = model_matrix;                    //!!!!!!
+		mvp = ProjectionMatrix * ViewMatrix * ModelMatrix;
+		//tmp
+		glUniformMatrix4fv(matrix_id, 1, GL_FALSE, &mvp[0][0]);
 		if (is_textured) {
 			// Bind our texture in Texture Unit 0
 			glActiveTexture(GL_TEXTURE0);
@@ -105,7 +207,7 @@ public:
 	}
 	void postInit() override
 	{
-		matrix = glGetUniformLocation(shader->getId(), "mvp");
+		matrix_id = glGetUniformLocation(shader->getId(), "mvp");
 	}
 	/** Set shader for model
 	@param mesh_vertices pointer on a shader
@@ -127,22 +229,12 @@ public:
 		glBufferData(GL_ARRAY_BUFFER, uv.size()* sizeof(GLfloat), reinterpret_cast<void*>(uv.data()), GL_STATIC_DRAW);
 	}
 private:
-	GfShader* shader;
-	GLuint vbo;
-	GLuint vao;
-	GLuint matrix;
-	GLuint color;
 	bool is_vbo_set = 0;
 	bool is_vao_set = 0;
 	bool is_color_set = 0;
-	std::vector<GLfloat> vertices;
-	std::vector<GLfloat> colors;
-
-	std::vector<GLfloat> texture_uv;
 	GLuint Texture;
 	GLuint texture_id;
 	GLuint uvbuffer;
-	bool is_textured = 0;
 	/** Generate VAO array and store its handler in vao field
 	*/
 	void genVAO()
@@ -262,3 +354,6 @@ private:
 
 	}
 };
+
+
+

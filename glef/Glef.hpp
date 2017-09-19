@@ -9,6 +9,7 @@
 #include "GlefModel.hpp"
 #include "GlefObject.hpp"
 #include "GlefCamera.hpp"
+#include "GlefRenderEngine.hpp"
 using namespace glm;
 
 class Glef {
@@ -77,6 +78,9 @@ public:
 			//status = ERROR;
 		}
 		glfwSetInputMode(window.window_ptr, GLFW_STICKY_KEYS, GL_TRUE);
+		glfwSetInputMode(window.window_ptr, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		glfwPollEvents();
+		glfwSetCursorPos(window.window_ptr, 1024 / 2, 768 / 2);
 		return OK;
 	}
 	/** Get currently active window
@@ -85,6 +89,50 @@ public:
 	GfWindow getActiveWindow() 
 	{
 		return active_window;
+	}
+	/** Drow all frames inside
+	@param camera Camera that will be used to render
+	*/
+	void Proceed(GfCameraActive *camera) {
+		active_window.setBackgroundCollor(GfCollorFactory::use().getCollor(Blue));
+
+		// Enable depth test
+		glEnable(GL_DEPTH_TEST);
+		// Accept fragment if it closer to the camera than the former one
+		glDepthFunc(GL_LESS);
+		glEnable(GL_CULL_FACE);
+		for (auto i = 0; i<objects.size(); i++)
+		{
+			objects[i]->init();
+			camera->preProcessObject(objects[i]);			
+		}
+		GfRenderEngine GRE;
+		do {
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			// Enable depth test
+			GRE.computeCameraMatricesFromInputs(camera, &active_window, &(camera->controls));
+			for (auto i=0;i<objects.size();i++)
+			{
+				if (objects[i]->force != nullptr)
+					GRE.computeModelMatricesFromForce(objects[i], &active_window, objects[i]->force);
+				//objects[i]->proceed();
+				//objects[i]->useElement(camera,&active_window);
+				if(objects[i]->is_textured)
+					GRE.RenderModelWithMovableCameraForEveryObjectTextured(objects[i], objects[i]->textureFromModelTMP(), camera, &active_window, &camera->controls, objects[i]->shader);
+				else
+					GRE.RenderModelWithMovableCameraForEveryObjectColored(objects[i], camera, &active_window, &camera->controls, objects[i]->shader);
+			}
+
+			glfwSwapBuffers(Glef::use().getActiveWindow().window_ptr);
+			glfwPollEvents();
+
+		} // Check if the ESC key was pressed or the window was closed
+		while (glfwGetKey(Glef::use().getActiveWindow().window_ptr, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
+			glfwWindowShouldClose(Glef::use().getActiveWindow().window_ptr) == 0);
+
+		// Close OpenGL window and terminate GLFW
+		glfwTerminate();
+		return;
 	}
 	/** Drow all frames inside
 	@param camera Camera that will be used to render
@@ -100,13 +148,13 @@ public:
 		for (auto i = 0; i<objects.size(); i++)
 		{
 			objects[i]->init();
-			camera->preProcessObject(objects[i]);			
+			camera->preProcessObject(objects[i]);
 		}
 
 		do {
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			// Enable depth test
-			for (auto i=0;i<objects.size();i++)
+			for (auto i = 0; i<objects.size(); i++)
 			{
 				objects[i]->proceed();
 			}
@@ -122,7 +170,9 @@ public:
 		glfwTerminate();
 		return;
 	}
-	void addObject(GfObject &obj)
+	
+	
+	void addObject(GfModel &obj)
 	{
 		objects.push_back(&obj);
 	}
@@ -147,5 +197,5 @@ private:
 	GfWindow active_window;
 	std::vector <GfWindow> windows;
 	glef_status status = UNKNOWN;
-	std::vector<GfObject*> objects;
+	std::vector<GfModel*> objects;
 };

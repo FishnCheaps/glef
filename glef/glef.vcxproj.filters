@@ -23,6 +23,9 @@
     <ClCompile Include="common\shader.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="GlefForce.hpp">
+      <Filter>Заголовочные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Glef.hpp">
@@ -56,6 +59,12 @@
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="GlefControls.hpp">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="GlefRenderEngine.hpp">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="GlefTexture.hpp">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>

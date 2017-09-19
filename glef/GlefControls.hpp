@@ -6,27 +6,27 @@ class GfControls
 public:
 	GfControls();
 	~GfControls();
-	void setMoseAllowed(bool is_allowed)
+	void setRotatingAllowed(bool is_allowed)
 	{
-		is_mouse_allowed = is_allowed;
+		is_rotating_allowed = is_allowed;
 	}
 	void setMovingAllowed(bool is_allowed)
 	{
-		is_mouse_allowed = is_allowed;
+		is_moving_allowed = is_allowed;
 	}
-	void setMouseSpeed(float speed)
-	{
-		mouse_speed = speed;
-	}
-	void setMovingSpeed(float speed)
-	{
-		moving_speed = speed;
-	}
-private:
-	bool is_mouse_allowed = false;
+	int key_right = GLFW_KEY_RIGHT;
+	int key_left = GLFW_KEY_LEFT;
+	int key_up = GLFW_KEY_UP;
+	int key_down = GLFW_KEY_DOWN;
+	int key_size_up = GLFW_KEY_0;
+	int key_size_down = GLFW_KEY_1;
+	bool is_rotating_allowed = false;
 	bool is_moving_allowed = false;
-	float mouse_speed = 0;
-	float moving_speed = 0;
+	bool is_sizing_allowed = false;
+	float speed = 3.0f;
+	float mouseSpeed = 0.005f;
+	float sizingSpeed = 1.0f;
+private:
 };
 
 GfControls::GfControls()
