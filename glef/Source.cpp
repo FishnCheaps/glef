@@ -43,7 +43,44 @@ int main() {
 		1.0f, 1.0f, 1.0f,
 		-1.0f, 1.0f, 1.0f,
 		1.0f,-1.0f, 1.0f };
-
+	std::vector<glm::vec3> normals{
+		{ -0.000001, 0.000000, 1.000000 },
+		{ -0.000000, -0.000000, 1.000000 },
+		{ 0.000000, 1.000000, -0.000000 },
+		{ 1.000000, -0.000000, 0.000000 },
+		{ -0.000001, 0.000000, 1.000000 },
+		{ -0.000000, -1.000000, 0.000000 },
+		{ -1.000000, -0.000000, -0.000000 },
+		{ -0.000001, 0.000000, 1.000000 },
+		{ 0.000000, 0.000000, -1.000000 },
+		{ 1.000000, -0.000000, 0.000000 },
+		{ 0.000000, 0.000000, -1.000000 },
+		{ -0.000001, 0.000000, 1.000000 },
+		{ -0.000001, 0.000000, 1.000000 },
+		{ 0.000000, 1.000000, -0.000000 },
+		{ -0.000000, -1.000000, 0.000000 },
+		{ -1.000000, -0.000000, -0.000000 },
+		{ -0.000000, -0.000000, 1.000000 },
+		{ -0.000001, 0.000000, 1.000000 },
+		{ 0.000000, 1.000000, -0.000000 },
+		{ -0.000000, -0.000000, 1.000000 },
+		{ -1.000000, -0.000000, -0.000000 },
+		{ 1.000000, 0.000000, 0.000001 },
+		{ 0.000000, 0.000000, -1.000000 },
+		{ 1.000000, -0.000000, 0.000000 },
+		{ 0.000000, 0.000000, -1.000000 },
+		{ 1.000000, 0.000000, 0.000001 },
+		{ -1.000000, -0.000000, -0.000000 },
+		{ 1.000000, 0.000000, 0.000001 },
+		{ 1.000000, -0.000000, 0.000000 },
+		{ -0.000000, -1.000000, 0.000000 },
+		{ 1.000000, 0.000000, 0.000001 },
+		{ -0.000000, -1.000000, 0.000000 },
+		{ 0.000000, 1.000000, -0.000000 },
+		{ 1.000000, 0.000000, 0.000001 },
+		{ 0.000000, 1.000000, -0.000000 },
+		{ -1.000000, -0.000000, -0.000000 }
+	};
 	std::vector<GLfloat> col = {
 		0.583f,  0.771f,  0.014f,
 		0.609f,  0.115f,  0.436f,
@@ -88,14 +125,20 @@ int main() {
 		1.0f,1.0f,-1.0f,
 		0.0f,2.0f,0.0f,
 		1.0f,1.0f,1.0f,
-		-1.0f,1.0f,-1.0f,
+		-1.0f,1.0f,1.0f,
 		0.0f,2.0f,0.0f,
 		-1.0f,1.0f,-1.0f,
 		-1.0f,1.0f,1.0f,
 		0.0f,2.0f,0.0f,
-		-1.0f,1.0f,1.0f,
+		-1.0f,1.0f,-1.0f,
+		1.0f,1.0f,-1.0f,
+		0.0f,2.0f,0.0f,
 		1.0f,1.0f,1.0f,
-		0.0f,2.0f,0.0f
+		-1.0f,1.0f,1.0f,
+		-1.0f,1.0f,-1.0f,
+		1.0f,1.0f,1.0f,
+		1.0f,1.0f,-1.0f,
+		-1.0f,1.0f,-1.0f,
 	};
 	std::vector<GLfloat> vec3 = {
 		-10.0f,0.0f,-10.0f,
@@ -124,7 +167,13 @@ int main() {
 		0.359f,  0.583f,  0.152f,
 		0.483f,  0.596f,  0.789f,
 		0.559f,  0.861f,  0.639f,
-		0.195f,  0.548f,  0.859f };
+		0.195f,  0.548f,  0.859f,
+		0.583f,  0.771f,  0.014f,
+		0.609f,  0.115f,  0.436f,
+		0.327f,  0.483f,  0.844f,
+		0.822f,  0.569f,  0.201f,
+		0.435f,  0.602f,  0.223f,
+		0.310f,  0.747f,  0.185f };
 	std::vector<GLfloat> uv= {
 		0.000059f, 1.0f - 0.000004f,
 		0.000103f, 1.0f - 0.336048f,
@@ -166,21 +215,23 @@ int main() {
 
 	auto shader = GfShaderFactory::use().loadShader("shaders/SimpleVertexShader.vertexshader", "shaders/SimpleFragmentShader.fragmentshader");
 	auto shader2 = GfShaderFactory::use().loadShader("shaders/TransformVertexShader.vertexshader", "shaders/TextureFragmentShader.fragmentshader");
+	auto shader3 = GfShaderFactory::use().loadShader("shaders/StandardShading.vertexshader", "shaders/StandardShading.fragmentshader");
 	obj.setVertices(vec);
 	//obj.setColor(col);
-	obj.setShader(&shader2);
+	obj.setShader(&shader3);
 	obj.addTexture("uvtemplate.DDS", uv);
-	obj2.setVertices(vec2);
-	obj2.setColor(col2);
-	obj2.setShader(&shader);
-	land.setVertices(vec3);
-	land.setColor(col3);
-	land.setShader(&shader);
+	obj.setNormals(normals);
+	//obj2.setVertices(vec2);
+	//obj2.setColor(col2);
+	//obj2.setShader(&shader);
+	//land.setVertices(vec3);
+	//land.setColor(col3);
+	//land.setShader(&shader);
 	GfForce force;
 	force.rot_x = 5;
 	obj.force = &force;
 	Glef::use().addObject(obj);
-	Glef::use().addObject(obj2);
+	//Glef::use().addObject(obj2);
 	//Glef::use().addObject(land);
 	//GfCamera cam=GfCameraFactory::use().getCamera(glm::vec3(4, 3, 3), glm::vec3(0, 0, 0));
 	GfCameraActive cam = GfCameraFactory::use().getCameraActive(glm::vec3(4, 3, 3), glm::vec3(0, 0, 0));
@@ -190,6 +241,9 @@ int main() {
 	cam.initial_fov = 45.0f;*/
 	GfControls controls;
 	cam.controls = controls;
+	GfLight light;
+	light.setup_light(&shader3, glm::vec3(0, 0, 0));
+	Glef::use().lights.push_back(&light);
 	//Uzhe net
 	Glef::use().Proceed(&cam);
 }

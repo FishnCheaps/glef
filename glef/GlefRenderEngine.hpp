@@ -6,6 +6,7 @@
 #include "GlefShader.hpp"
 #include "GlefTexture.hpp"
 #include "GlefForce.hpp"
+#include "GlefLight.hpp"
 
 class GfRenderEngine
 {
@@ -13,6 +14,81 @@ public:
 	GfRenderEngine();
 	~GfRenderEngine();
 
+
+	void RenderModelWithMovableCameraForLight(GfModel* model, GfTexture texture, GfCameraActive * camera, GfWindow * window, GfControls * controls, GfShader * shader, GfLight * light)
+	{
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// Use our shader
+		glUseProgram(shader->getId());
+		//computeCameraMatricesFromInputs(camera, window, controls);
+		// Compute the MVP matrix from keyboard and mouse input
+		computeCameraMatricesFromInputs(camera, window, controls);
+		glm::mat4 ProjectionMatrix = camera->projection_matrix;
+		glm::mat4 ViewMatrix = camera->view_matrix;
+		glm::mat4 ModelMatrix = model->model_matrix;                    //!!!!!!
+		model->mvp = ProjectionMatrix * ViewMatrix * ModelMatrix;
+
+		// Send our transformation to the currently bound shader, 
+		// in the "MVP" uniform
+		glUniformMatrix4fv(model->matrix_id, 1, GL_FALSE, &model->mvp[0][0]);
+		glUniformMatrix4fv(model->ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
+		glUniformMatrix4fv(camera->ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
+
+		glm::vec3 lightPos = light->position;
+		glUniform3f(light->shader_id, lightPos.x, lightPos.y, lightPos.z);
+
+
+		// Bind our texture in Texture Unit 0
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture.texture);
+		// Set our "myTextureSampler" sampler to use Texture Unit 0
+		glUniform1i(texture.texture_id, 0);
+
+		// 1rst attribute buffer : vertices
+		glEnableVertexAttribArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, model->vbo);
+		glVertexAttribPointer(
+			0,                  // attribute. No particular reason for 0, but must match the layout in the shader.
+			3,                  // size
+			GL_FLOAT,           // type
+			GL_FALSE,           // normalized?
+			0,                  // stride
+			(void*)0            // array buffer offset
+		);
+
+		// 2nd attribute buffer : UVs
+		glEnableVertexAttribArray(1);
+		glBindBuffer(GL_ARRAY_BUFFER, texture.uvbuffer);
+		glVertexAttribPointer(
+			1,                                // attribute. No particular reason for 1, but must match the layout in the shader.
+			2,                                // size : U+V => 2
+			GL_FLOAT,                         // type
+			GL_FALSE,                         // normalized?
+			0,                                // stride
+			(void*)0                          // array buffer offset
+		);
+		glEnableVertexAttribArray(2);
+		glBindBuffer(GL_ARRAY_BUFFER, model->normal);
+		glVertexAttribPointer(
+			2,                                // attribute
+			3,                                // size
+			GL_FLOAT,                         // type
+			GL_FALSE,                         // normalized?
+			0,                                // stride
+			(void*)0                          // array buffer offset
+		);
+		// Draw the triangle !
+		glDrawArrays(GL_TRIANGLES, 0, model->vertices.size()); // 12*3 indices starting at 0 -> 12 triangles
+
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
+		// Swap buffers
+		//glfwSwapBuffers(window->window_ptr);
+		//glfwPollEvents();
+
+	}
 
 	void RenderModelWithMovableCameraForEveryObjectTextured(GfModel* model,GfTexture texture, GfCameraActive * camera, GfWindow * window, GfControls * controls, GfShader * shader)
 	{

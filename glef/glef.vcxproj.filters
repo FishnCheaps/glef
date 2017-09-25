@@ -67,6 +67,9 @@
     <ClInclude Include="GlefTexture.hpp">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="GlefLight.hpp">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\SimpleFragmentShader.fragmentshader">
@@ -79,6 +82,12 @@
       <Filter>Shaders</Filter>
     </None>
     <None Include="shaders\TransformVertexShader.vertexshader">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\StandardShading.fragmentshader">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\StandardShading.vertexshader">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

@@ -9,6 +9,7 @@ public:
 	//refact
 	float initial_fov= 45.0f;
 	glm::mat4 view_matrix;
+	GLuint ViewMatrixID;
 	glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), 4.0f / 3.0f, 0.1f, 100.0f);
 	GfCamera();
 	~GfCamera();
@@ -114,6 +115,26 @@ public:
 		cam.setPosition(pos);
 		cam.setPositionUp(up_direction);
 		cam.setInitialized();
+		return cam;
+	}
+	GfCamera getCamera(glm::vec3 pos, glm::vec3 direction,GfShader * shader, glm::vec3 up_direction = glm::vec3(0, 1, 0))
+	{
+		GfCamera cam;
+		cam.setDirection(direction);
+		cam.setPosition(pos);
+		cam.setPositionUp(up_direction);
+		cam.setInitialized();
+		cam.ViewMatrixID= glGetUniformLocation(shader->getId(), "V");
+		return cam;
+	}
+	GfCameraActive getCameraActive(glm::vec3 pos, glm::vec3 direction, GfShader * shader, glm::vec3 up_direction = glm::vec3(0, 1, 0))
+	{
+		GfCameraActive cam;
+		cam.setDirection(direction);
+		cam.setPosition(pos);
+		cam.setPositionUp(up_direction);
+		cam.setInitialized();
+		cam.ViewMatrixID = glGetUniformLocation(shader->getId(), "V");
 		return cam;
 	}
 	GfCameraActive getCameraActive(glm::vec3 pos, glm::vec3 direction, glm::vec3 up_direction = glm::vec3(0, 1, 0))

@@ -100,11 +100,15 @@ public:
 	GLuint vbo;
 	GLuint vao;
 	GLuint matrix_id;
+	GLuint ModelMatrixID;
 	GLuint color;
+	GLuint normal;
 	bool is_textured = 0;
+	bool is_normals_set = 0;
 	std::vector<GLfloat> vertices;
 	std::vector<GLfloat> colors;
 	std::vector<GLfloat> texture_uv;
+	std::vector<glm::vec3> normals;
 	GfTexture textureFromModelTMP() //TO-DO remove it
 	{
 		GfTexture tx;
@@ -143,6 +147,14 @@ public:
 		glBindBuffer(GL_ARRAY_BUFFER, color);
 		glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), reinterpret_cast<void*>(colors.data()), GL_STATIC_DRAW);
 	}
+	void setNormals(std::vector<glm::vec3> new_normals)
+	{
+		if (!is_normals_set)
+			genNormals();
+		normals = new_normals;
+		glBindBuffer(GL_ARRAY_BUFFER, normal);
+		glBufferData(GL_ARRAY_BUFFER, normals.size() * sizeof(glm::vec3), reinterpret_cast<void*>(normals.data()), GL_STATIC_DRAW);
+	}
 	/** Proceed this element in every frame. Drowing object
 	@param shaders Shader that should be used for drowing model
 	*/
@@ -157,6 +169,8 @@ public:
 		mvp = ProjectionMatrix * ViewMatrix * ModelMatrix;
 		//tmp
 		glUniformMatrix4fv(matrix_id, 1, GL_FALSE, &mvp[0][0]);
+		glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
+		glUniformMatrix4fv(cam->ViewMatrixID, 1, GL_FALSE, &ViewMatrix[0][0]);
 		if (is_textured) {
 			// Bind our texture in Texture Unit 0
 			glActiveTexture(GL_TEXTURE0);
@@ -199,15 +213,31 @@ public:
 				(void*)0                          // array buffer offset
 			);
 		}
+		if (is_normals_set)
+		{
+			glEnableVertexAttribArray(2);
+			glBindBuffer(GL_ARRAY_BUFFER, normal);
+			glVertexAttribPointer(
+				2,                                // attribute
+				3,                                // size
+				GL_FLOAT,                         // type
+				GL_FALSE,                         // normalized?
+				0,                                // stride
+				(void*)0                          // array buffer offset
+			);
+		}
 		// Draw the triangle !
 		glDrawArrays(GL_TRIANGLES, 0, vertices.size()); // 3 indices starting at 0 -> 1 triangle
 
 		glDisableVertexAttribArray(0);//TO-DO Ask Alehondrii
 		glDisableVertexAttribArray(1);
+		if (is_normals_set)
+			glDisableVertexAttribArray(2);
 	}
 	void postInit() override
 	{
 		matrix_id = glGetUniformLocation(shader->getId(), "mvp");
+		ModelMatrixID= glGetUniformLocation(shader->getId(), "M");
 	}
 	/** Set shader for model
 	@param mesh_vertices pointer on a shader
@@ -257,6 +287,11 @@ private:
 	{
 		glGenBuffers(1, &color);
 		is_color_set = true;
+	}
+	void genNormals()
+	{
+		glGenBuffers(1, &normal);
+		is_normals_set = true;
 	}
 
 

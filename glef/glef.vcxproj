@@ -154,6 +154,7 @@
     <ClInclude Include="GlefCollor.hpp" />
     <ClInclude Include="GlefControls.hpp" />
     <ClInclude Include="GlefEnums.hpp" />
+    <ClInclude Include="GlefLight.hpp" />
     <ClInclude Include="GlefObject.hpp" />
     <ClInclude Include="GlefModel.hpp" />
     <ClInclude Include="GlefRenderEngine.hpp" />
@@ -164,6 +165,8 @@
   <ItemGroup>
     <None Include="shaders\SimpleFragmentShader.fragmentshader" />
     <None Include="shaders\SimpleVertexShader.vertexshader" />
+    <None Include="shaders\StandardShading.fragmentshader" />
+    <None Include="shaders\StandardShading.vertexshader" />
     <None Include="shaders\TextureFragmentShader.fragmentshader" />
     <None Include="shaders\TransformVertexShader.vertexshader" />
   </ItemGroup>

@@ -48,7 +48,7 @@ public:
 		windows.push_back(window);
 		return OK;
 	}
-
+	std::vector<GfLight*> lights;
 	/** Create new window and set is as active
 	@param title Define window title. (New Window by default)
 	@param width Window width (1024 by default)
@@ -117,8 +117,10 @@ public:
 					GRE.computeModelMatricesFromForce(objects[i], &active_window, objects[i]->force);
 				//objects[i]->proceed();
 				//objects[i]->useElement(camera,&active_window);
-				if(objects[i]->is_textured)
+				if (objects[i]->is_textured&&lights.size() == 0)
 					GRE.RenderModelWithMovableCameraForEveryObjectTextured(objects[i], objects[i]->textureFromModelTMP(), camera, &active_window, &camera->controls, objects[i]->shader);
+				else if (objects[i]->is_textured)
+					GRE.RenderModelWithMovableCameraForLight(objects[i], objects[i]->textureFromModelTMP(), camera, &active_window, &camera->controls, objects[i]->shader,lights[0]);
 				else
 					GRE.RenderModelWithMovableCameraForEveryObjectColored(objects[i], camera, &active_window, &camera->controls, objects[i]->shader);
 			}
